@@ -1,10 +1,11 @@
 import { Router } from "express";
 import { EstoquePaesController } from "../controller/EstoquePaesController";
 import { ModalidadePaesController } from "../controller/ModalidadePaesController";
-
+import { SaleController } from "../controller/SaleController";
 const router = Router();
 const estoquePaesController = new EstoquePaesController();
 const modalidadePaesController = new ModalidadePaesController();
+const sellController = new SaleController();
 
 //Rotas do estoque
 
@@ -20,10 +21,14 @@ router.delete(`/estoque/:id`, (req, res) => estoquePaesController.removerEstoque
 //Rotas das Modalidades
 router.post('/modalidade', (req, res) => modalidadePaesController.createModality(req, res));
 router.get('/modalidade/todas', (req, res) => modalidadePaesController.getAllModalities(res));
-router.get('/modalidade', (res, req) => modalidadePaesController.searchModality(res, req));
-router.get('/modalidade/:id', (res, req) => modalidadePaesController.searchModality(res, req));
-router.put('/modalidade/:id', (res, req) => modalidadePaesController.updateModality(res, req));
-router.delete('/modalidade/:id', (res, req) => modalidadePaesController.deleteModality(res, req));
+router.get('/modalidade', (req, res) => modalidadePaesController.searchModality(req, res));
+router.get('/modalidade/:id', (req, res) => modalidadePaesController.searchModality(req, res));
+router.put('/modalidade/:id', (req, res) => modalidadePaesController.updateModality(req, res));
+router.delete('/modalidade/:id', (req, res) => modalidadePaesController.deleteModality(req, res));
+
+router.post('/venda', (req, res) => sellController.createSale(req, res));
+router.get('/venda:id', (req, res) => sellController.findSale(req, res));
+router.get('/venda', (req, res) => sellController.findSale(req, res));
 
 
 export default router;

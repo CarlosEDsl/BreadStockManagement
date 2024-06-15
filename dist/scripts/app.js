@@ -13,4 +13,11 @@ function logInfo() {
     console.log(`API EM EXECUÇÃO NO: http:localhost:${PORT}`);
 }
 app.use("/api", index_1.default);
+logInfo();
+app.get('/', (req, res) => {
+    res.send('Servidor Node.js funcionando!');
+});
+app.listen(PORT, () => {
+    console.log(`Servidor escutando na porta ${PORT}`);
+});
 exports.default = app;
