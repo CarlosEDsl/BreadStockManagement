@@ -19,12 +19,21 @@ class VendaPaesRepository {
         if (index !== -1) {
             this.vendaPaesRepository[index] = venda;
         }
+        return venda;
     }
     searchById(id) {
         return this.vendaPaesRepository.find(VendaPaes => VendaPaes.id);
     }
-    searchByCPF(id) {
-        return this.vendaPaesRepository.find(VendaPaes => VendaPaes.cpfCliente);
+    searchByCPF(cpf) {
+        if (this.vendaPaesRepository.find(VendaPaes => VendaPaes.cpfCliente)) {
+            let sells = [];
+            for (let i = 0; i < this.vendaPaesRepository.length; i++) {
+                sells.push(this.vendaPaesRepository[i]);
+            }
+            ;
+            return sells;
+        }
+        return undefined;
     }
 }
 exports.VendaPaesRepository = VendaPaesRepository;

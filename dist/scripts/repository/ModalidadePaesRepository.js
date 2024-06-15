@@ -5,6 +5,9 @@ class ModalidadePaesRepository {
     constructor() {
         this.modalidadePaes = [];
     }
+    allModalities() {
+        return this.modalidadePaes;
+    }
     create(modalidade) {
         this.modalidadePaes.push(modalidade);
     }
@@ -19,13 +22,13 @@ class ModalidadePaesRepository {
         if (index !== -1) {
             this.modalidadePaes[index] = modalidade;
         }
-        return index;
+        return this.modalidadePaes[index];
     }
     searchById(id) {
-        return this.modalidadePaes.find(ModalidadePaes => ModalidadePaes.id === id);
+        return this.modalidadePaes.find(ModalidadePaes => ModalidadePaes.getId() === id);
     }
     searchByName(name) {
-        return this.modalidadePaes.find(ModalidadePaes => ModalidadePaes.nome == name);
+        return this.modalidadePaes.find(ModalidadePaes => ModalidadePaes.getName().toUpperCase() == name.toUpperCase());
     }
 }
 exports.ModalidadePaesRepository = ModalidadePaesRepository;

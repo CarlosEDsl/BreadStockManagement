@@ -9,10 +9,10 @@ class EstoquePaesRepository {
         this.estoqueLista.push(estoqueLista);
     }
     searchById(id) {
-        return this.estoqueLista.find(estoqueLista => estoqueLista.id === id);
+        return this.estoqueLista.find(estoqueLista => estoqueLista.getId() === id);
     }
     searchByModalidade(modalidade) {
-        return this.estoqueLista.find(estoqueLista => estoqueLista.modalidade === modalidade);
+        return this.estoqueLista.find(estoqueLista => estoqueLista.getModalidade() === modalidade);
     }
     allStocks() {
         return this.estoqueLista;
@@ -22,7 +22,7 @@ class EstoquePaesRepository {
         if (index !== -1) {
             this.estoqueLista[index] = estoqueItem;
         }
-        return index;
+        return this.estoqueLista[index];
     }
     deleteStock(estoque) {
         const index = this.estoqueLista.indexOf(estoque);
