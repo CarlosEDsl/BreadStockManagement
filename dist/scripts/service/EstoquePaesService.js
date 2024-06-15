@@ -3,9 +3,11 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.EstoquePaesService = void 0;
 const EstoquePaes_1 = require("../model/EstoquePaes");
 const EstoquePaesRepository_1 = require("../repository/EstoquePaesRepository");
+const ModalidadePaesService_1 = require("./ModalidadePaesService");
 class EstoquePaesService {
     constructor() {
         this.estoqueRepository = new EstoquePaesRepository_1.EstoquePaesRepository();
+        this.modalidadePaesService = new ModalidadePaesService_1.ModalidadePaesService();
     }
     findAll() {
         return this.estoqueRepository.allStocks();
@@ -34,24 +36,23 @@ class EstoquePaesService {
         return undefined;
     }
     delete(id) {
-        const estoque = this.estoqueRepository.searchById(id);
+        const estoque = this.estoqueRepository.searchById(parseInt(id));
         if (!estoque) {
             throw new Error("Estoque não encontrado");
         }
         this.estoqueRepository.deleteStock(estoque);
     }
     update(stockData) {
-        const { id, modalidade, quantidade } = stockData;
+        let { id, modalidade, quantidade } = stockData;
         if (!id || !modalidade || !quantidade) {
             throw new Error("Faltam dados");
         }
-        let estoque = this.find(id, modalidade);
-        if (!estoque) {
+        modalidade = this.modalidadePaesService.findByName(modalidade);
+        if (this.estoqueRepository.searchById(id)) {
             throw new Error("Estoque não encontrado");
         }
-        estoque.id = id;
-        estoque.modalidade = modalidade;
-        estoque.quantidade = quantidade;
+        let estoque = new EstoquePaes_1.EstoquePaes(modalidade, quantidade, id);
+        this.estoqueRepository.updateStock(modalidade);
         return estoque;
     }
 }
