@@ -1,19 +1,23 @@
 import { ModalidadePaesRepository } from './../repository/ModalidadePaesRepository';
 import { EstoquePaes } from "../model/EstoquePaes";
-import { ModalidadePaes } from "../model/ModalidadePaes";
 import { EstoquePaesRepository } from "../repository/EstoquePaesRepository";
-import { ModalidadePaesService } from "./ModalidadePaesService";
+import { ModalidadePaes } from '../model/ModalidadePaes';
 
 export class EstoquePaesService{
-    estoqueRepository:EstoquePaesRepository = new EstoquePaesRepository();
-    modalidadePaesService:ModalidadePaesService = new ModalidadePaesService();
+    estoqueRepository:EstoquePaesRepository;
+    modalidadePaesRepository:ModalidadePaesRepository;
+
+    constructor(){
+        this.estoqueRepository = EstoquePaesRepository.getInstance();
+        this.modalidadePaesRepository = ModalidadePaesRepository.getInstance();
+    }
 
     findAll(): EstoquePaes[] {
         return this.estoqueRepository.allStocks();
     }
 
     create(estoqueInfo:any): EstoquePaes{
-        const {modalidade, quantidade} = estoqueInfo;
+        const {modalidade, quantidade, price} = estoqueInfo;
         if(!modalidade || !quantidade) {
             throw new Error("Entra inválida");
         }
@@ -22,8 +26,12 @@ export class EstoquePaesService{
             if(estoqueEncontrado){
                 throw new Error("Já existe um estoque cadastrado para essa modalidade");
             }
-        
-        const novoEstoque = new EstoquePaes(modalidade, quantidade);
+
+        const breadModality:ModalidadePaes|undefined = this.modalidadePaesRepository.searchById(modalidade);
+        if(!breadModality) {
+            throw new Error("Essa modalidade não existe");
+        }
+        const novoEstoque = new EstoquePaes(breadModality, quantidade, price);
         this.estoqueRepository.createStockCount(novoEstoque);
         return novoEstoque;
     }
@@ -49,17 +57,17 @@ export class EstoquePaesService{
     }
 
     update(stockData:any): EstoquePaes {
-        let {id, modalidade, quantidade} = stockData;
-        if(!id || !modalidade || !quantidade){
+        let {id, modalidade, quantidade, price} = stockData;
+        if(!id || !modalidade || !quantidade || !stockData){
             throw new Error("Faltam dados");
         }
 
-        modalidade = this.modalidadePaesService.findByName(modalidade);
+        modalidade = this.modalidadePaesRepository.searchById(modalidade);
 
         if(this.estoqueRepository.searchById(id)){
             throw new Error("Estoque não encontrado");
         }
-        let estoque = new EstoquePaes(modalidade, quantidade, id);
+        let estoque = new EstoquePaes(modalidade, quantidade, price, id);
         
         this.estoqueRepository.updateStock(modalidade);
         return estoque;
