@@ -2,14 +2,28 @@ import { EstoquePaes } from "../model/EstoquePaes";
 import { ModalidadePaes } from "../model/ModalidadePaes";
 
 export class EstoquePaesRepository{
+    private static instance: EstoquePaesRepository;
+    private estoqueLista: EstoquePaes[];
 
-    estoqueLista: EstoquePaes[] = []
+    constructor() {
+        this.estoqueLista = []
+    }
+
+    public static getInstance(): EstoquePaesRepository {
+        if(!EstoquePaesRepository.instance) {
+            EstoquePaesRepository.instance = new EstoquePaesRepository();
+        }
+        return EstoquePaesRepository.instance;
+    }
+
+
 
     createStockCount(estoqueLista:EstoquePaes){
         this.estoqueLista.push(estoqueLista);
     }
 
     searchById(id:number):EstoquePaes|undefined{
+        console.log(this.estoqueLista);
         return this.estoqueLista.find(estoqueLista => estoqueLista.getId() === id);
     }
 
