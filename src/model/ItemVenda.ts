@@ -1,4 +1,3 @@
-import e from "express";
 
 export class ItemVenda {
     private estoquePaesID:number;
@@ -11,5 +10,9 @@ export class ItemVenda {
 
     public getEstoquePaesId() {
         return this.estoquePaesID;
+    }
+
+    public getQuantidade() {
+        return this.quantidade;
     }
 }

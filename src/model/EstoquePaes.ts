@@ -1,13 +1,17 @@
+import { IdGenerator } from "../utils/IdGenerator";
 import { ModalidadePaes } from "./ModalidadePaes";
 
 export class EstoquePaes {
+
     private id:number;
     private modalidade:ModalidadePaes;
     private quantidade:number;
+    private price:number;
 
-    constructor(modalidade:ModalidadePaes, quantidade:number, id?:number){
+    constructor(modalidade:ModalidadePaes, quantidade:number, price:number, id?:number){
         this.modalidade = modalidade;
         this.quantidade = quantidade
+        this.price = price;
         if(id){
             this.id = id;
         }
@@ -17,7 +21,7 @@ export class EstoquePaes {
     }
     
     private gerarId():number{
-        return Date.now();
+        return IdGenerator.getNextID("Stock");
     }
     
     public getId() : number {
@@ -40,5 +44,12 @@ export class EstoquePaes {
         this.quantidade = quantidade;
     }
     
+    public getPrice(price:number) {
+        this.price = price;
+    }
+
+    public setPrice() {
+        return this.price;
+    }
 
 }

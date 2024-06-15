@@ -1,20 +1,19 @@
+import { IdGenerator } from "../utils/IdGenerator";
+
 export class ModalidadePaes{
     private id:number;
     private name:string;
-    private price:number;
     private vegan:boolean;
 
-    constructor(nome:string, preco:number, vegano:boolean) {
+    constructor(nome:string, vegano:boolean) {
         this.name = nome;
-        this.price = preco;
         this.vegan = vegano;
         this.id = this.gerarId();
     }
 
     private gerarId():number{
-        return Date.now();
+        return IdGenerator.getNextID("Modality");
     }
-
     public getId() {
         return this.id;
     }
@@ -25,14 +24,6 @@ export class ModalidadePaes{
     public setName(name:string) {
         this.name = name;
     }
-
-    public getPrice() {
-        return this.price;
-    }
-    public setPrice(price:number) {
-        this.price = price;
-    }
-
     public isVegan() {
         return this.vegan;
     }
