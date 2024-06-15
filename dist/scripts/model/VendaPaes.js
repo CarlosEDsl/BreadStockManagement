@@ -2,8 +2,13 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.VendaPaes = void 0;
 class VendaPaes {
-    constructor(id, cpfCliente, valorTotal, itensComprados) {
-        this.id = this.gerarId();
+    constructor(cpfCliente, valorTotal, itensComprados, id) {
+        if (id) {
+            this.id = id;
+        }
+        else {
+            this.id = this.gerarId();
+        }
         this.cpfCliente = cpfCliente;
         this.valorTotal = valorTotal;
         this.itensComprados = itensComprados;
