@@ -38,8 +38,8 @@ export class EstoquePaesController{
 
     async cadastrarEstoque(req:Request, res:Response): Promise<Response>{
         try{
-            const { modalidade, quantidade } = req.body;
-            const novoEstoque: EstoquePaes = this.estoqueService.create({modalidade, quantidade});
+            const { modalidade, quantidade, price } = req.body;
+            const novoEstoque: EstoquePaes = this.estoqueService.create({modalidade, quantidade, price});
             return res.status(201).json(novoEstoque);
         } catch (e:any){
             return res.status(400).json({ message: e.message});
@@ -50,7 +50,7 @@ export class EstoquePaesController{
         try {
             
             const { id } = req.params;
-            const { modalidade, quantidade } = req.body;
+            const { modalidade, quantidade, price } = req.body;
             const estoqueAtualizado = this.estoqueService.update({ id, modalidade, quantidade });
             return res.status(200).json(estoqueAtualizado);
         } catch (e:any) {

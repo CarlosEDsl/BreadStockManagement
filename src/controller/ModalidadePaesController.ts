@@ -17,8 +17,8 @@ export class ModalidadePaesController{
 
     async createModality(req:Request, res:Response) {
         try {
-            const { name, price, vegan } = req.body;
-            const modality:ModalidadePaes = this.modalidadeService.create(name, price, vegan)
+            const { name, vegan } = req.body;
+            const modality:ModalidadePaes = this.modalidadeService.create(name, vegan)
             return res.status(201).json(modality);
         } catch (e:any) {
             return res.status(400).json(e.message)
@@ -48,7 +48,7 @@ export class ModalidadePaesController{
             if(!this.modalidadeService.findId(parseInt(id))) {
                 throw new Error("Modalidade não existe")
             }
-            const modality = this.modalidadeService.update(parseInt(id), name, price, vegan);
+            const modality = this.modalidadeService.update(parseInt(id), name, vegan);
             return res.status(200).json(modality);
         } catch (e:any) {
             return res.status(404).json(e.message)
