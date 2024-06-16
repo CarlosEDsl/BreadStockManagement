@@ -38,8 +38,6 @@ export class VendaPaesService {
             if(!ArraysUtils.arrayEquals(Object.keys(item), ['stockId', 'amount'])) {
                 throw new Error("Passagem dos items com parametros inválidos")
             }
-
-            console.log(this.estoquePaesRepository.searchById(item.stockId))
             
             if(!this.estoquePaesRepository.searchById(item.stockId)){
                 throw new Error(`O ID: ${item.stockId} não representa nenhum estoque`)

@@ -37,11 +37,10 @@ export class ModalidadePaesRepository {
     }
 
     searchById(id:number):ModalidadePaes|undefined{
-        console.log(this.modalityList);
         return this.modalityList.find(ModalidadePaes => ModalidadePaes.getId() === id);
     }
 
     searchByName(name:string):ModalidadePaes|undefined {
-        return this.modalityList.find(ModalidadePaes => ModalidadePaes.getName().toUpperCase() == name.toUpperCase());
+        return this.modalityList.find(ModalidadePaes => ModalidadePaes.getName().toUpperCase() === name.toUpperCase());
     }
 }

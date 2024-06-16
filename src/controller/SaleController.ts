@@ -23,7 +23,9 @@ export class SaleController {
     async findSale(req:Request, res:Response){
         try{
             let { id } = req.body;
+            console.log(id);
             if(!id) id = req.params;
+
 
             const sale = this.vendaPaesService.findById(id);
             return res.status(200).json(sale);

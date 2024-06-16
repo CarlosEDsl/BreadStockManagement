@@ -27,7 +27,7 @@ router.put('/modalidade/:id', (req, res) => modalidadePaesController.updateModal
 router.delete('/modalidade/:id', (req, res) => modalidadePaesController.deleteModality(req, res));
 
 router.post('/venda', (req, res) => sellController.createSale(req, res));
-router.get('/venda:id', (req, res) => sellController.findSale(req, res));
+router.get('/venda/:id', (req, res) => sellController.findSale(req, res));
 router.get('/venda', (req, res) => sellController.findSale(req, res));
 
 

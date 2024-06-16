@@ -12,6 +12,9 @@ export class ModalidadePaesService{
         if(!nome){
             throw new Error("Dados insuficientes");
         }
+        if(this.modalidadePaesRepository.searchByName(nome)){
+            throw new Error("Já existe uma modalidade com esse nome")
+        }
         let modalidade = new ModalidadePaes(nome, vegano);
         this.modalidadePaesRepository.create(modalidade);
         return modalidade;

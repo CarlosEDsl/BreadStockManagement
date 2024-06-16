@@ -23,7 +23,6 @@ export class EstoquePaesRepository{
     }
 
     searchById(id:number):EstoquePaes|undefined{
-        console.log(this.estoqueLista);
         return this.estoqueLista.find(estoqueLista => estoqueLista.getId() === id);
     }
 
