@@ -1,8 +1,8 @@
-import { VendaPaesService } from "../service/VendaPaesService";
+import { BreadSaleService } from "../service/BreadSaleService";
 import { Request, Response } from 'express';
-export class SaleController {
+export class BreadSaleController {
 
-    private vendaPaesService = new VendaPaesService();
+    private breadSaleService = new BreadSaleService();
 
     //cpfCliente:number;
     //valorTotal:number;
@@ -12,7 +12,7 @@ export class SaleController {
         try {
             const { cpf, saleItems }: {cpf:number, saleItems:any[]} = req.body;
 
-            const sale = this.vendaPaesService.create({cpf, saleItems});
+            const sale = this.breadSaleService.create({cpf, saleItems});
 
             return res.status(201).json(sale);
         } catch (e:any) {
@@ -27,7 +27,7 @@ export class SaleController {
             if(!id) id = req.params;
 
 
-            const sale = this.vendaPaesService.findById(id);
+            const sale = this.breadSaleService.findById(id);
             return res.status(200).json(sale);
         } catch(e:any){
             return res.status(404).json(e.message);

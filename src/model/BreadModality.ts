@@ -1,6 +1,6 @@
 import { IdGenerator } from "../utils/IdGenerator";
 
-export class ModalidadePaes{
+export class BreadModality{
     private id:number;
     private name:string;
     private vegan:boolean;
@@ -8,10 +8,10 @@ export class ModalidadePaes{
     constructor(nome:string, vegano:boolean) {
         this.name = nome;
         this.vegan = vegano;
-        this.id = this.gerarId();
+        this.id = this.generateID();
     }
 
-    private gerarId():number{
+    private generateID():number{
         return IdGenerator.getNextID("Modality");
     }
     public getId() {

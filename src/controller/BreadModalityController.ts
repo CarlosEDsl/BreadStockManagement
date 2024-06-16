@@ -1,14 +1,14 @@
-import { ModalidadePaes } from "../model/ModalidadePaes";
-import { ModalidadePaesService } from "../service/ModalidadePaesService";
+import { BreadModality } from "../model/BreadModality";
+import { BreadModalityService } from "../service/BreadModalityService";
 import { Request, Response } from 'express';
 
-export class ModalidadePaesController{
+export class BreadModalityController{
 
-    private modalidadeService = new ModalidadePaesService();
+    private modalityService = new BreadModalityService();
 
     async getAllModalities(res:Response) {
         try {
-            const allModalities:ModalidadePaes[] = this.modalidadeService.getAll();
+            const allModalities:BreadModality[] = this.modalityService.getAll();
             return res.status(200).json(allModalities);
         } catch(e:any) {
             return res.status(404).json(e.message);
@@ -18,7 +18,7 @@ export class ModalidadePaesController{
     async createModality(req:Request, res:Response) {
         try {
             const { name, vegan } = req.body;
-            const modality:ModalidadePaes = this.modalidadeService.create(name, vegan)
+            const modality:BreadModality = this.modalityService.create(name, vegan)
             return res.status(201).json(modality);
         } catch (e:any) {
             return res.status(400).json(e.message)
@@ -30,10 +30,10 @@ export class ModalidadePaesController{
             const { id } = req.params;
             const { name } = req.body;
             if(id) {
-                const modality = this.modalidadeService.findId(parseInt(id));
+                const modality = this.modalityService.findId(parseInt(id));
                 return res.status(200).json(modality);
             } else {
-                const modality = this.modalidadeService.findByName(name);
+                const modality = this.modalityService.findByName(name);
                 return res.status(200).json(modality);
             }
         } catch (e:any) {
@@ -44,11 +44,11 @@ export class ModalidadePaesController{
     async updateModality(req:Request, res:Response) {
         try {
             const { id } = req.params;
-            const { name, price, vegan } = req.body;
-            if(!this.modalidadeService.findId(parseInt(id))) {
+            const { name, vegan } = req.body;
+            if(!this.modalityService.findId(parseInt(id))) {
                 throw new Error("Modalidade não existe")
             }
-            const modality = this.modalidadeService.update(parseInt(id), name, vegan);
+            const modality = this.modalityService.update(parseInt(id), name, vegan);
             return res.status(200).json(modality);
         } catch (e:any) {
             return res.status(404).json(e.message)
@@ -60,9 +60,9 @@ export class ModalidadePaesController{
             const { id } = req.params;
             const { name } = req.body;
             if(!id)
-                this.modalidadeService.delete(this.modalidadeService.findByName(name).getId());
+                this.modalityService.delete(this.modalityService.findByName(name).getId());
             else
-                this.modalidadeService.delete(parseInt(id));
+                this.modalityService.delete(parseInt(id));
             
             
                 
