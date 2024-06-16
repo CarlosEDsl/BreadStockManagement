@@ -21,7 +21,7 @@ export class BreadSaleRepository {
     }
     
     searchById(id:number):BreadSale|undefined{
-        return this.breadSaleRepository.find(breadSale => breadSale.id);
+        return this.breadSaleRepository.find(breadSale => breadSale.id === id);
     }
     searchByCPF(cpf:number):BreadSale[]|undefined{
         if(this.breadSaleRepository.find(breadSale => breadSale.cpf)) {

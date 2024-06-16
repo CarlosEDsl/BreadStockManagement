@@ -44,11 +44,11 @@ export class BreadStock {
         this.amount = quantidade;
     }
     
-    public getPrice(price:number) {
+    public setPrice(price:number) {
         this.price = price;
     }
 
-    public setPrice() {
+    public getPrice() {
         return this.price;
     }
 

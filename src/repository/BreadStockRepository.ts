@@ -34,13 +34,20 @@ export class BreadStockRepository{
         return this.stockArray;
     }
 
-    updateStock(stock:BreadStock):BreadStock{
-        const index = this.stockArray.indexOf(stock);
-        if(index !== -1){
-            this.stockArray[index] = stock;
+    updateStock(stock: BreadStock): BreadStock {
+        // Encontra o índice do item a ser atualizado
+        const index = this.stockArray.findIndex(tstock => tstock.getId() === stock.getId());
+    
+        // Se o item for encontrado, atualiza-o
+        if (index !== -1) {
+          this.stockArray[index] = stock;
+          return this.stockArray[index];
         }
-        return this.stockArray[index];
-    }
+    
+        // Se o item não for encontrado, lança um erro
+        throw new Error("Erro no update");
+      }
+
 
     deleteStock(stock:BreadStock){
         const index = this.stockArray.indexOf(stock);

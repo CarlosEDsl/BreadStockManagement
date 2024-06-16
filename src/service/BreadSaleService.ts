@@ -43,20 +43,47 @@ export class BreadSaleService {
             let newItem = new SaleItem(item.stockId, item.amount);
             sales.push(newItem);
             itensDTO.push(this.itemtoDTO(newItem));
-            
-            totalValue += item.amount;
+
+            let price = this.breadStockRepository.searchById(newItem.getBreadStockID())?.getPrice();
+            if(price)
+                totalValue += item.amount*price;
         });
 
         const newSale = new BreadSale(cpf, totalValue, sales);
         this.breadSaleRepository.create(newSale);
 
-        const saleDTO = new SaleDTO(newSale.id, newSale.cpf, itensDTO, newSale.totalValue);
-
+        const saleDTO: SaleDTO = {
+            saleID: newSale.id,
+            cpf: newSale.cpf,
+            items: itensDTO,
+            total: newSale.totalValue
+        };
+        console.log(saleDTO)        
         return saleDTO;
     }
 
-    findById(id:number):BreadSale|undefined {
-        return this.breadSaleRepository.searchById(id);
+    findById(id:number):SaleDTO|undefined {
+        console.log("oiiii")
+        const sale = this.breadSaleRepository.searchById(id);
+        console.log(id);
+        console.log(sale);
+        let itensDTO:ItemCreateDTO[] = [];
+
+        sale?.items.forEach(item => {
+            itensDTO.push(this.itemtoDTO(item));
+        });
+        if(sale){
+            const saleDTO:SaleDTO = {
+                saleID: sale?.id,
+                cpf: sale?.cpf,
+                items: itensDTO,
+                total: sale?.totalValue
+            }
+            return saleDTO;
+        }
+        else {
+            throw new Error("Venda não encontrada");
+        }
     }
 
     findCustomerSells(cpf:number):BreadSale[]|undefined {
@@ -64,7 +91,7 @@ export class BreadSaleService {
     }
 
     delete(id:number){
-        let elementToDel:BreadSale|undefined = this.findById(id);
+        let elementToDel:any = this.findById(id);
         if(elementToDel)
             this.breadSaleRepository.remove(elementToDel);
         else

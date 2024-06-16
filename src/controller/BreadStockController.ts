@@ -50,9 +50,10 @@ export class BreadStockController{
         try {
             
             const { id } = req.params;
-            const { modality, amount, price } = req.body;
-            const estoqueAtualizado = this.stockService.update({ id, modality, amount, price });
-            return res.status(200).json(estoqueAtualizado);
+            const { modality, amount, price } = req.body;const parsedId = parseInt(id, 10);
+
+            const updatedStock = this.stockService.update({ id: parsedId, modality, amount, price });            
+            return res.status(200).json(updatedStock);
         } catch (e:any) {
             return res.status(400).json(e.message);
         }

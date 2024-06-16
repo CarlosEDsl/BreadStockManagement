@@ -27,10 +27,14 @@ export class BreadModalityController{
 
     async searchModality(req:Request, res:Response) {
         try {
-            const { id } = req.params;
+            let { id } = (req.params.id) ? req.params : req.body;
+            if (typeof id === 'string' && !isNaN(Number(id))) {
+                id = parseInt(id, 10);
+            }
             const { name } = req.body;
+
             if(id) {
-                const modality = this.modalityService.findId(parseInt(id));
+                const modality = this.modalityService.findId(id);
                 return res.status(200).json(modality);
             } else {
                 const modality = this.modalityService.findByName(name);

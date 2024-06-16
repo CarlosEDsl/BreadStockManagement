@@ -27,11 +27,11 @@ export class BreadSale {
     }
 
     get cpf(): number {
-        return this.cpf;
+        return this._cpf;
     }
 
     set cpf(value: number) {
-        this.cpf = value;
+        this._cpf = value;
     }
 
     get totalValue(): number {

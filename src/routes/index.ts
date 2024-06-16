@@ -25,6 +25,7 @@ router.get('/modalidade', (req, res) => breadModalityController.searchModality(r
 router.get('/modalidade/:id', (req, res) => breadModalityController.searchModality(req, res));
 router.put('/modalidade/:id', (req, res) => breadModalityController.updateModality(req, res));
 router.delete('/modalidade/:id', (req, res) => breadModalityController.deleteModality(req, res));
+router.delete('/modalidade', (req, res) => breadModalityController.deleteModality(req, res));
 
 router.post('/venda', (req, res) => breadSaleController.createSale(req, res));
 router.get('/venda/:id', (req, res) => breadSaleController.findSale(req, res));

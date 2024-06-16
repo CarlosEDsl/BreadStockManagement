@@ -25,9 +25,11 @@ export class BreadSaleController {
             let { id } = req.body;
             console.log(id);
             if(!id) id = req.params;
+            console.log(typeof(id))
 
 
             const sale = this.breadSaleService.findById(id);
+            console.log(sale)
             return res.status(200).json(sale);
         } catch(e:any){
             return res.status(404).json(e.message);

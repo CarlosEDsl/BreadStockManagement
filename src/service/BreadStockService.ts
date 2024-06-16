@@ -63,13 +63,12 @@ export class BreadStockService{
         }
 
         modality = this.breadModalityRepository.searchById(modality);
-
-        if(this.breadStockRepository.searchById(id)){
+        if(!this.breadStockRepository.searchById(id)){
             throw new Error("Estoque não encontrado");
         }
         let stock = new BreadStock(modality, amount, price, id);
         
-        this.breadStockRepository.updateStock(modality);
+        this.breadStockRepository.updateStock(stock);
         return stock;
     }
 
