@@ -1,4 +1,4 @@
-import { BreadStockService } from '../service/BreadStockService';
+import { BreadStockService } from './../service/BreadStockService';
 import { BreadStock } from '../model/BreadStock';
 import {Request, Response} from 'express';
 
@@ -68,4 +68,5 @@ export class BreadStockController{
             return res.status(404).json({ message: e.message });
         }
     }
+
 }

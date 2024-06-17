@@ -1,7 +1,7 @@
 import { BreadSaleService } from "../service/BreadSaleService";
 import { Request, Response } from 'express';
 export class BreadSaleController {
-
+w
     private breadSaleService = new BreadSaleService();
 
     //cpfCliente:number;
@@ -26,7 +26,6 @@ export class BreadSaleController {
             console.log(id);
             if(!id) id = req.params;
             console.log(typeof(id))
-
 
             const sale = this.breadSaleService.findById(id);
             console.log(sale)

@@ -4,6 +4,7 @@ export class BreadSaleRepository {
     breadSaleRepository:BreadSale[] = [];
 
     create(sale:BreadSale) {
+        const success = 
         this.breadSaleRepository.push(sale);
     }
     remove(sale:BreadSale){

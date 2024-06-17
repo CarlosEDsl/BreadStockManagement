@@ -35,9 +35,17 @@ export class BreadSaleService {
             if(!ArraysUtils.arrayEquals(Object.keys(item), ['stockId', 'amount'])) {
                 throw new Error("Passagem dos items com parametros inválidos")
             }
+
+            const stock = this.breadStockRepository.searchById(item.stockId)
             
-            if(!this.breadStockRepository.searchById(item.stockId)){
-                throw new Error(`O ID: ${item.stockId} não representa nenhum estoque`)
+            if(!stock){
+                throw new Error(`O ID: ${item.stockId} não representa nenhum estoque`);
+            }
+            //Taking out from stock
+            stock.setAmount(stock.getAmount() - item.amount);
+            if(stock.getAmount() < 0){
+                stock.setAmount(stock.getAmount() + item.amount);
+                throw new Error("Itens insuficientes");
             }
 
             let newItem = new SaleItem(item.stockId, item.amount);
@@ -58,7 +66,7 @@ export class BreadSaleService {
             items: itensDTO,
             total: newSale.totalValue
         };
-        console.log(saleDTO)        
+
         return saleDTO;
     }
 
