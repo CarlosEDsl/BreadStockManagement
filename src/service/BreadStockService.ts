@@ -23,9 +23,9 @@ export class BreadStockService{
         }
 
         const stockFind = this.find(undefined, modality)
-            if(stockFind){
-                throw new Error("Já existe um estoque cadastrado para essa modalidade");
-            }
+        if(stockFind){
+            throw new Error("Já existe um estoque cadastrado para essa modalidade");
+        }   
 
         const breadModality:BreadModality|undefined = this.breadModalityRepository.searchById(modality);
         if(!breadModality) {
@@ -42,18 +42,29 @@ export class BreadStockService{
             return this.breadStockRepository.searchById(idNumber);
         }
         if(modality){
-            return this.breadStockRepository.searchByModality(modality);
+            const modalityFind = this.breadModalityRepository.searchById(modality);
+            if(modalityFind)
+                return this.breadStockRepository.searchByModality(modalityFind);
         }
         return undefined;
 
     }
 
-    delete(id:any) {
-        const stock = this.breadStockRepository.searchById(parseInt(id));
+    delete(stockData:any) {
+        const stock = this.breadStockRepository.searchById(parseInt(stockData.id));
         if(!stock){
             throw new Error("Estoque não encontrado");
         }
-        this.breadStockRepository.deleteStock(stock);
+        if(stock.getModality() != this.breadModalityRepository.searchById(stockData.modality) || stock.getPrice() !== stockData.price){
+            throw new Error("Existem dados divergentes na requisição de deletar")
+        }
+
+        if(stockData.amount > stock.getAmount())
+            throw new Error("Não é possível remover uma quantia maior do que existe");
+
+        stock.setAmount(stock.getAmount() - stockData.amount);
+
+        return this.breadStockRepository.deleteStock(stock);
     }
 
     update(stockData:any): BreadStock {
@@ -65,6 +76,9 @@ export class BreadStockService{
         modality = this.breadModalityRepository.searchById(modality);
         if(!this.breadStockRepository.searchById(id)){
             throw new Error("Estoque não encontrado");
+        }
+        if(this.find(undefined, modality)){
+            throw new Error("Essa modalidade já possui estoque")
         }
         let stock = new BreadStock(modality, amount, price, id);
         

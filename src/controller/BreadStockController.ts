@@ -61,9 +61,14 @@ export class BreadStockController{
 
     async removeStock(req:Request, res:Response): Promise<Response>{
         try{
-            const { id } = req.params;
-            this.stockService.delete(id);
-            return res.status(204).send();
+            let { id } = (req.params.id) ? req.params : req.body;
+            if (typeof id === 'string' && !isNaN(Number(id))) {
+                id = parseInt(id, 10);
+            }
+            const { modality, amount, price } = req.body;
+
+            const stock = this.stockService.delete({ id, modality, amount, price });
+            return res.status(200).json(stock);
         } catch(e:any) {
             return res.status(404).json({ message: e.message });
         }

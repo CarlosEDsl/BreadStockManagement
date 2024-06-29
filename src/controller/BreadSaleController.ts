@@ -3,11 +3,7 @@ import { Request, Response } from 'express';
 export class BreadSaleController {
 w
     private breadSaleService = new BreadSaleService();
-
-    //cpfCliente:number;
-    //valorTotal:number;
-    //itensComprados:Array<ItemVenda>;
-
+    
     async createSale(req:Request, res:Response) {
         try {
             const { cpf, saleItems }: {cpf:number, saleItems:any[]} = req.body;

@@ -50,9 +50,10 @@ export class BreadStockRepository{
 
 
     deleteStock(stock:BreadStock){
-        const index = this.stockArray.indexOf(stock);
+        const index = this.stockArray.findIndex(stockArray => stockArray.getId() === stock.getId())
         if(index !== -1){
-            this.stockArray.splice(index);
+            this.stockArray[index].setAmount(stock.getAmount());
         }
+        return this.stockArray[index];
     }
 }

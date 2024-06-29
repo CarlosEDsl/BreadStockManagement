@@ -17,6 +17,7 @@ router.get(`/estoque/:id`, (req, res) => breadStockController.findStock(req, res
 router.get(`/estoque`, (req, res) => breadStockController.findStock(req, res));
 router.put(`/estoque/:id`, (req, res) => breadStockController.updateStock(req, res));
 router.delete(`/estoque/:id`, (req, res) => breadStockController.removeStock(req, res));
+router.delete(`/estoque`, (req, res) => breadStockController.removeStock(req, res));
 
 //Rotas das Modalidades
 router.post('/modalidade', (req, res) => breadModalityController.createModality(req, res));
