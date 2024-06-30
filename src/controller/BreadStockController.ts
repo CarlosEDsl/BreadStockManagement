@@ -73,5 +73,4 @@ export class BreadStockController{
             return res.status(404).json({ message: e.message });
         }
     }
-
 }

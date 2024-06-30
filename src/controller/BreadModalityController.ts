@@ -6,7 +6,7 @@ export class BreadModalityController{
 
     private modalityService = new BreadModalityService();
 
-    async getAllModalities(res:Response) {
+    async getAllModalities(res:Response): Promise<Response> {
         try {
             const allModalities:BreadModality[] = this.modalityService.getAll();
             return res.status(200).json(allModalities);
@@ -15,7 +15,7 @@ export class BreadModalityController{
         }
     }
 
-    async createModality(req:Request, res:Response) {
+    async createModality(req:Request, res:Response): Promise<Response> {
         try {
             const { name, vegan } = req.body;
             const modality:BreadModality = this.modalityService.create(name, vegan)
@@ -25,7 +25,7 @@ export class BreadModalityController{
         }
     }
 
-    async searchModality(req:Request, res:Response) {
+    async searchModality(req:Request, res:Response): Promise<Response> {
         try {
             let { id } = (req.params.id) ? req.params : req.body;
             if (typeof id === 'string' && !isNaN(Number(id))) {
@@ -45,7 +45,7 @@ export class BreadModalityController{
         }
     }
 
-    async updateModality(req:Request, res:Response) {
+    async updateModality(req:Request, res:Response): Promise<Response> {
         try {
             const { id } = req.params;
             const { name, vegan } = req.body;
@@ -59,7 +59,7 @@ export class BreadModalityController{
         }
     }
 
-    async deleteModality(req:Request, res:Response){
+    async deleteModality(req:Request, res:Response): Promise<Response>{
         try {
             const { id } = req.params;
             const { name } = req.body;

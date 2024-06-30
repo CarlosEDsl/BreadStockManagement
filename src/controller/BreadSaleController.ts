@@ -1,10 +1,10 @@
 import { BreadSaleService } from "../service/BreadSaleService";
 import { Request, Response } from 'express';
 export class BreadSaleController {
-w
+
     private breadSaleService = new BreadSaleService();
     
-    async createSale(req:Request, res:Response) {
+    async createSale(req:Request, res:Response): Promise<Response> {
         try {
             const { cpf, saleItems }: {cpf:number, saleItems:any[]} = req.body;
 
@@ -16,7 +16,7 @@ w
         }
     }
 
-    async findSale(req:Request, res:Response){
+    async findSale(req:Request, res:Response): Promise<Response>{
         try{
             let { id } = req.body;
             console.log(id);
