@@ -74,13 +74,14 @@ export class BreadStockService{
         }
 
         modality = this.breadModalityRepository.searchById(modality);
-        if(!this.breadStockRepository.searchById(id)){
+        const oldStock = this.breadStockRepository.searchById(id);
+        if(!oldStock){
             throw new Error("Estoque não encontrado");
         }
         if(this.find(undefined, modality)){
             throw new Error("Essa modalidade já possui estoque")
         }
-        let stock = new BreadStock(modality, amount, price, id);
+        let stock = new BreadStock(modality, oldStock.getAmount() - amount, price, id);
         
         this.breadStockRepository.updateStock(stock);
         return stock;
