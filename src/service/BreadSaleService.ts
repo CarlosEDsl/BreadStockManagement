@@ -6,6 +6,7 @@ import { SaleItem } from '../model/SaleItem';
 import { BreadStockRepository } from '../repository/BreadStockRepository';
 import { ItemCreateDTO } from '../dtos/ItemCreateDTO';
 import { SaleDTO } from '../dtos/SaleDTO';
+import { BreadStock } from '../model/BreadStock';
 
 export class BreadSaleService {
     breadSaleRepository = new BreadSaleRepository();
@@ -27,6 +28,8 @@ export class BreadSaleService {
         let sales:SaleItem[] = [];
         let totalValue:number=0;
         let itensDTO:ItemCreateDTO[] = [];
+        let oldStock:BreadStock[] = [];
+        let stockErr:boolean = false;
 
 
         //Verifications and SaleItems creation (Item by Item)
@@ -36,17 +39,19 @@ export class BreadSaleService {
                 throw new Error("Passagem dos items com parametros inválidos")
             }
 
-            const stock = this.breadStockRepository.searchById(item.stockId)
-            
+            const stock = this.breadStockRepository.searchById(item.stockId);
             if(!stock){
                 throw new Error(`O ID: ${item.stockId} não representa nenhum estoque`);
             }
+
+            oldStock.push(new BreadStock(stock?.getModality(), stock?.getAmount(), stock?.getPrice(), stock?.getId()));
+        
             //Taking out from stock
             stock.setAmount(stock.getAmount() - item.amount);
             if(stock.getAmount() < 0){
-                stock.setAmount(stock.getAmount() + item.amount);
-                throw new Error("Itens insuficientes");
+                stockErr = true;
             }
+            console.log(oldStock);
 
             let newItem = new SaleItem(item.stockId, item.amount);
             sales.push(newItem);
@@ -56,6 +61,15 @@ export class BreadSaleService {
             if(price)
                 totalValue += item.amount*price;
         });
+
+        if(stockErr){
+            for(let i=0; i < oldStock.length-1; i++) {
+                console.log(oldStock[i]);
+                this.breadStockRepository.updateStock(oldStock[i]);
+            }
+            throw new Error("Estoque insuficiente")
+        }
+            
 
         const newSale = new BreadSale(cpf, totalValue, sales);
         this.breadSaleRepository.create(newSale);

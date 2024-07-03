@@ -46,7 +46,7 @@ export class BreadStockRepository{
     
         // Se o item não for encontrado, lança um erro
         throw new Error("Erro no update");
-      }
+    }
 
 
     deleteStock(stock:BreadStock){
