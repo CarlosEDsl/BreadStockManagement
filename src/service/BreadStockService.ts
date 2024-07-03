@@ -81,7 +81,7 @@ export class BreadStockService{
         if(this.find(undefined, modality)){
             throw new Error("Essa modalidade já possui estoque")
         }
-        let stock = new BreadStock(modality, oldStock.getAmount() - amount, price, id);
+        let stock = new BreadStock(modality, oldStock.getAmount() + amount, price, id);
         
         this.breadStockRepository.updateStock(stock);
         return stock;

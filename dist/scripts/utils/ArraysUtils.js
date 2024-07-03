@@ -1,4 +1,6 @@
 "use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.ArraysUtils = void 0;
 class ArraysUtils {
     static arrayEquals(ar1, ar2) {
         if (ar1.length !== ar2.length)
@@ -10,3 +12,4 @@ class ArraysUtils {
         return true;
     }
 }
+exports.ArraysUtils = ArraysUtils;
