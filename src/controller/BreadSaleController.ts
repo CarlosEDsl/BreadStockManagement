@@ -20,7 +20,7 @@ export class BreadSaleController {
         try{
             let { id } = req.body;
             console.log(id);
-            if(!id) id = req.params;
+            if(!id) id = req.params.id;
             console.log(typeof(id))
 
             const sale = this.breadSaleService.findById(id);

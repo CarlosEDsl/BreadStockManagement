@@ -34,36 +34,47 @@ export class BreadSaleService {
 
         //Verifications and SaleItems creation (Item by Item)
         saleItems.forEach(item => {
+            if(!stockErr){
+                if(!ArraysUtils.arrayEquals(Object.keys(item), ['stockId', 'amount'])) {
+                    throw new Error("Passagem dos items com parametros inválidos")
+                }
 
-            if(!ArraysUtils.arrayEquals(Object.keys(item), ['stockId', 'amount'])) {
-                throw new Error("Passagem dos items com parametros inválidos")
+                const stock = this.breadStockRepository.searchById(item.stockId);
+                if(!stock){
+                    throw new Error(`O ID: ${item.stockId} não representa nenhum estoque`);
+                }
+                
+                let finded:boolean;
+                finded=false;
+                for(let i=0; i < oldStock.length; i++){
+
+                    if(oldStock[i].getId() === stock.getId()){
+                        finded = true;
+                        console.log("oi")
+                    }
+                }
+                if(!finded)
+                    oldStock.push(new BreadStock(stock?.getModality(), stock?.getAmount(), stock?.getPrice(), stock?.getId()));
+            
+                //Taking out from stock
+                stock.setAmount(stock.getAmount() - item.amount);
+                if(stock.getAmount() < 0){
+                    stockErr = true;
+                }
+                console.log("/Volta" + oldStock + "/Volta");
+
+                let newItem = new SaleItem(item.stockId, item.amount);
+                sales.push(newItem);
+                itensDTO.push(this.itemtoDTO(newItem));
+
+                let price = this.breadStockRepository.searchById(newItem.getBreadStockID())?.getPrice();
+                if(price)
+                    totalValue += item.amount*price;
             }
-
-            const stock = this.breadStockRepository.searchById(item.stockId);
-            if(!stock){
-                throw new Error(`O ID: ${item.stockId} não representa nenhum estoque`);
-            }
-
-            oldStock.push(new BreadStock(stock?.getModality(), stock?.getAmount(), stock?.getPrice(), stock?.getId()));
-        
-            //Taking out from stock
-            stock.setAmount(stock.getAmount() - item.amount);
-            if(stock.getAmount() < 0){
-                stockErr = true;
-            }
-            console.log(oldStock);
-
-            let newItem = new SaleItem(item.stockId, item.amount);
-            sales.push(newItem);
-            itensDTO.push(this.itemtoDTO(newItem));
-
-            let price = this.breadStockRepository.searchById(newItem.getBreadStockID())?.getPrice();
-            if(price)
-                totalValue += item.amount*price;
         });
 
         if(stockErr){
-            for(let i=0; i < oldStock.length-1; i++) {
+            for(let i=0; i < oldStock.length; i++) {
                 console.log(oldStock[i]);
                 this.breadStockRepository.updateStock(oldStock[i]);
             }
