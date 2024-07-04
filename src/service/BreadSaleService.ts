@@ -50,7 +50,6 @@ export class BreadSaleService {
 
                     if(oldStock[i].getId() === stock.getId()){
                         finded = true;
-                        console.log("oi")
                     }
                 }
                 if(!finded)
@@ -61,7 +60,6 @@ export class BreadSaleService {
                 if(stock.getAmount() < 0){
                     stockErr = true;
                 }
-                console.log("/Volta" + oldStock + "/Volta");
 
                 let newItem = new SaleItem(item.stockId, item.amount);
                 sales.push(newItem);
@@ -75,7 +73,6 @@ export class BreadSaleService {
 
         if(stockErr){
             for(let i=0; i < oldStock.length; i++) {
-                console.log(oldStock[i]);
                 this.breadStockRepository.updateStock(oldStock[i]);
             }
             throw new Error("Estoque insuficiente")
@@ -96,10 +93,7 @@ export class BreadSaleService {
     }
 
     findById(id:number):SaleDTO|undefined {
-        console.log("oiiii")
         const sale = this.breadSaleRepository.searchById(id);
-        console.log(id);
-        console.log(sale);
         let itensDTO:ItemCreateDTO[] = [];
 
         sale?.items.forEach(item => {
@@ -136,7 +130,7 @@ export class BreadSaleService {
         if(!name) {
             throw new Error("Na conversão de DTO id não encontrado");
         }
-        console.log(name.getModality());
+        
         const itemDTO:ItemCreateDTO = new ItemCreateDTO(item.getBreadStockID(), item.getAmount(), name.getModality().getName()); 
         return itemDTO;
     }
