@@ -59,10 +59,8 @@ class BreadStockController {
     updateStock(req, res) {
         return __awaiter(this, void 0, void 0, function* () {
             try {
-                const { id } = req.params;
-                const { modality, amount, price } = req.body;
-                const parsedId = parseInt(id, 10);
-                const updatedStock = this.stockService.update({ id: parsedId, modality, amount, price });
+                const { id, modality, amount, price } = req.body;
+                const updatedStock = this.stockService.update({ id, modality, amount, price });
                 return res.status(200).json(updatedStock);
             }
             catch (e) {

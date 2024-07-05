@@ -18,12 +18,8 @@ export class BreadSaleController {
 
     async findSale(req:Request, res:Response): Promise<Response>{
         try{
-            let { id } = req.body;
-            console.log(id);
-            if(!id) id = req.params.id;
-            console.log(typeof(id))
-
-            const sale = this.breadSaleService.findById(id);
+            const id = req.params.id
+            const sale = this.breadSaleService.findById(parseInt(id));
             console.log(sale)
             return res.status(200).json(sale);
         } catch(e:any){

@@ -47,7 +47,10 @@ export class BreadModalityController{
 
     async updateModality(req:Request, res:Response): Promise<Response> {
         try {
-            const { id } = req.params;
+            let { id } = (req.params.id) ? req.params : req.body;
+            if (typeof id === 'string' && !isNaN(Number(id))) {
+                id = parseInt(id, 10);
+            }
             const { name, vegan } = req.body;
             if(!this.modalityService.findId(parseInt(id))) {
                 throw new Error("Modalidade não existe")
@@ -61,18 +64,12 @@ export class BreadModalityController{
 
     async deleteModality(req:Request, res:Response): Promise<Response>{
         try {
-            const { id } = req.params;
-            const { name } = req.body;
-            if(!id)
-                this.modalityService.delete(this.modalityService.findByName(name).getId());
-            else
-                this.modalityService.delete(parseInt(id));
-            
-            
+            const { id, name, vegan } = req.body;
+            this.modalityService.delete(parseInt(id), name, vegan);
                 
-            return res.status(204).send();
+            return res.status(202).send();
         } catch(e:any) {
-            return res. status(404).json(e.message)
+            return res. status(400).json(e.message)
         }
     }
 

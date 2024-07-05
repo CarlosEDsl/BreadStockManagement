@@ -16,6 +16,7 @@ router.get(`/estoque/:id`, (req, res) => breadStockController.findStock(req, res
 //Rota de busca por modalidade
 router.get(`/estoque`, (req, res) => breadStockController.findStock(req, res));
 router.put(`/estoque/:id`, (req, res) => breadStockController.updateStock(req, res));
+router.put(`/estoque`, (req, res) => breadStockController.updateStock(req, res));
 router.delete(`/estoque/:id`, (req, res) => breadStockController.removeStock(req, res));
 router.delete(`/estoque`, (req, res) => breadStockController.removeStock(req, res));
 
@@ -25,6 +26,7 @@ router.get('/modalidade/todas', (req, res) => breadModalityController.getAllModa
 router.get('/modalidade', (req, res) => breadModalityController.searchModality(req, res));
 router.get('/modalidade/:id', (req, res) => breadModalityController.searchModality(req, res));
 router.put('/modalidade/:id', (req, res) => breadModalityController.updateModality(req, res));
+router.put('/modalidade', (req, res) => breadModalityController.updateModality(req, res));
 router.delete('/modalidade/:id', (req, res) => breadModalityController.deleteModality(req, res));
 router.delete('/modalidade', (req, res) => breadModalityController.deleteModality(req, res));
 

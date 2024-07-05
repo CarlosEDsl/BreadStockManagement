@@ -30,7 +30,6 @@ class BreadModalityController {
         return __awaiter(this, void 0, void 0, function* () {
             try {
                 const { name, vegan } = req.body;
-                console.log(name);
                 const modality = this.modalityService.create(name, vegan);
                 return res.status(201).json(modality);
             }
@@ -64,7 +63,10 @@ class BreadModalityController {
     updateModality(req, res) {
         return __awaiter(this, void 0, void 0, function* () {
             try {
-                const { id } = req.params;
+                let { id } = (req.params.id) ? req.params : req.body;
+                if (typeof id === 'string' && !isNaN(Number(id))) {
+                    id = parseInt(id, 10);
+                }
                 const { name, vegan } = req.body;
                 if (!this.modalityService.findId(parseInt(id))) {
                     throw new Error("Modalidade não existe");
@@ -80,16 +82,12 @@ class BreadModalityController {
     deleteModality(req, res) {
         return __awaiter(this, void 0, void 0, function* () {
             try {
-                const { id } = req.params;
-                const { name } = req.body;
-                if (!id)
-                    this.modalityService.delete(this.modalityService.findByName(name).getId());
-                else
-                    this.modalityService.delete(parseInt(id));
-                return res.status(204).send();
+                const { id, name, vegan } = req.body;
+                this.modalityService.delete(parseInt(id), name, vegan);
+                return res.status(202).send();
             }
             catch (e) {
-                return res.status(404).json(e.message);
+                return res.status(400).json(e.message);
             }
         });
     }

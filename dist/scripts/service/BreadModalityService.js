@@ -45,8 +45,12 @@ class BreadModalityService {
             newModality.setIsVegan(vegan);
         return this.breadModalityRepository.update(newModality);
     }
-    delete(id) {
+    delete(id, name, vegan) {
         let modality = this.breadModalityRepository.searchById(id);
+        if ((modality === null || modality === void 0 ? void 0 : modality.getName()) != name || modality.isVegan() != vegan) {
+            console.log(name, vegan, id, modality);
+            throw new Error("Dados divergentes na requisição");
+        }
         if (!modality)
             throw new Error("Modalidade não encontrada");
         this.breadModalityRepository.delete(modality);

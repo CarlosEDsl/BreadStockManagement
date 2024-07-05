@@ -57,10 +57,14 @@ class BreadStockService {
     update(stockData) {
         let { id, modality, amount, price } = stockData;
         if (!id || !modality || !amount || !stockData) {
+            console.log(stockData);
             throw new Error("Faltam dados");
         }
         modality = this.breadModalityRepository.searchById(modality);
         const oldStock = this.breadStockRepository.searchById(id);
+        if ((oldStock === null || oldStock === void 0 ? void 0 : oldStock.getModality()) != modality) {
+            throw new Error("O id e a modalidade não batem");
+        }
         if (!oldStock) {
             throw new Error("Estoque não encontrado");
         }

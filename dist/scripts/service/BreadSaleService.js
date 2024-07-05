@@ -8,6 +8,7 @@ const BreadSaleRepository_1 = require("../repository/BreadSaleRepository");
 const SaleItem_1 = require("../model/SaleItem");
 const BreadStockRepository_1 = require("../repository/BreadStockRepository");
 const ItemCreateDTO_1 = require("../dtos/ItemCreateDTO");
+const BreadStock_1 = require("../model/BreadStock");
 class BreadSaleService {
     constructor() {
         this.breadSaleRepository = new BreadSaleRepository_1.BreadSaleRepository();
@@ -21,29 +22,47 @@ class BreadSaleService {
         let sales = [];
         let totalValue = 0;
         let itensDTO = [];
+        let oldStock = [];
+        let stockErr = false;
         //Verifications and SaleItems creation (Item by Item)
         saleItems.forEach(item => {
             var _a;
-            if (!ArraysUtils_1.ArraysUtils.arrayEquals(Object.keys(item), ['stockId', 'amount'])) {
-                throw new Error("Passagem dos items com parametros inválidos");
+            if (!stockErr) {
+                if (!ArraysUtils_1.ArraysUtils.arrayEquals(Object.keys(item), ['stockId', 'amount'])) {
+                    throw new Error("Passagem dos items com parametros inválidos");
+                }
+                const stock = this.breadStockRepository.searchById(item.stockId);
+                if (!stock) {
+                    throw new Error(`O ID: ${item.stockId} não representa nenhum estoque`);
+                }
+                let finded;
+                finded = false;
+                for (let i = 0; i < oldStock.length; i++) {
+                    if (oldStock[i].getId() === stock.getId()) {
+                        finded = true;
+                    }
+                }
+                if (!finded)
+                    oldStock.push(new BreadStock_1.BreadStock(stock === null || stock === void 0 ? void 0 : stock.getModality(), stock === null || stock === void 0 ? void 0 : stock.getAmount(), stock === null || stock === void 0 ? void 0 : stock.getPrice(), stock === null || stock === void 0 ? void 0 : stock.getId()));
+                //Taking out from stock
+                stock.setAmount(stock.getAmount() - item.amount);
+                if (stock.getAmount() < 0) {
+                    stockErr = true;
+                }
+                let newItem = new SaleItem_1.SaleItem(item.stockId, item.amount);
+                sales.push(newItem);
+                itensDTO.push(this.itemtoDTO(newItem));
+                let price = (_a = this.breadStockRepository.searchById(newItem.getBreadStockID())) === null || _a === void 0 ? void 0 : _a.getPrice();
+                if (price)
+                    totalValue += item.amount * price;
             }
-            const stock = this.breadStockRepository.searchById(item.stockId);
-            if (!stock) {
-                throw new Error(`O ID: ${item.stockId} não representa nenhum estoque`);
-            }
-            //Taking out from stock
-            stock.setAmount(stock.getAmount() - item.amount);
-            if (stock.getAmount() < 0) {
-                stock.setAmount(stock.getAmount() + item.amount);
-                throw new Error("Itens insuficientes");
-            }
-            let newItem = new SaleItem_1.SaleItem(item.stockId, item.amount);
-            sales.push(newItem);
-            itensDTO.push(this.itemtoDTO(newItem));
-            let price = (_a = this.breadStockRepository.searchById(newItem.getBreadStockID())) === null || _a === void 0 ? void 0 : _a.getPrice();
-            if (price)
-                totalValue += item.amount * price;
         });
+        if (stockErr) {
+            for (let i = 0; i < oldStock.length; i++) {
+                this.breadStockRepository.updateStock(oldStock[i]);
+            }
+            throw new Error("Estoque insuficiente");
+        }
         const newSale = new BreadSale_1.BreadSale(cpf, totalValue, sales);
         this.breadSaleRepository.create(newSale);
         const saleDTO = {
@@ -55,10 +74,7 @@ class BreadSaleService {
         return saleDTO;
     }
     findById(id) {
-        console.log("oiiii");
         const sale = this.breadSaleRepository.searchById(id);
-        console.log(id);
-        console.log(sale);
         let itensDTO = [];
         sale === null || sale === void 0 ? void 0 : sale.items.forEach(item => {
             itensDTO.push(this.itemtoDTO(item));
@@ -91,7 +107,6 @@ class BreadSaleService {
         if (!name) {
             throw new Error("Na conversão de DTO id não encontrado");
         }
-        console.log(name.getModality());
         const itemDTO = new ItemCreateDTO_1.ItemCreateDTO(item.getBreadStockID(), item.getAmount(), name.getModality().getName());
         return itemDTO;
     }

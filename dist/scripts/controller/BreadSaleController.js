@@ -30,12 +30,8 @@ class BreadSaleController {
     findSale(req, res) {
         return __awaiter(this, void 0, void 0, function* () {
             try {
-                let { id } = req.body;
-                console.log(id);
-                if (!id)
-                    id = req.params;
-                console.log(typeof (id));
-                const sale = this.breadSaleService.findById(id);
+                const id = req.params.id;
+                const sale = this.breadSaleService.findById(parseInt(id));
                 console.log(sale);
                 return res.status(200).json(sale);
             }
